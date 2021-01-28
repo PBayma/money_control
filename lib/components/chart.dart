@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:money_control/components/chart_bar.dart';
 import 'package:money_control/models/transaction.dart';
 
 class Chart extends StatelessWidget {
@@ -33,13 +34,33 @@ class Chart extends StatelessWidget {
     });
   }
 
+  double get _weekTotalValue {
+    return groupedTransactions.fold(0.0, (sum, tr) {
+      return sum + tr['value'];
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    groupedTransactions;
     return Card(
       elevation: 6,
       margin: EdgeInsets.all(20),
-      child: Row(
-        children: [],
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: groupedTransactions.map((transaction) {
+            return Flexible(
+              fit: FlexFit.tight,
+              child: ChartBar(
+                label: transaction['day'],
+                value: transaction['value'],
+                percentage: (transaction['value'] as double) / _weekTotalValue,
+              ),
+            );
+          }).toList(),
+        ),
       ),
     );
   }

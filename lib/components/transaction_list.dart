@@ -35,41 +35,29 @@ class TransactionList extends StatelessWidget {
                   final transaction = transactions[index];
 
                   return Card(
-                    child: Row(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 10),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Theme.of(context).primaryColor,
-                              width: 2,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
+                    elevation: 5,
+                    margin: EdgeInsets.symmetric(
+                      horizontal: 5,
+                      vertical: 8,
+                    ),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Theme.of(context).primaryColor,
+                        radius: 30,
+                        child: Padding(
+                          padding: const EdgeInsets.all(6.0),
+                          child: FittedBox(
+                            child: Text('R\$${transaction.value}'),
                           ),
-                          child: Text(
-                            'R\$ ${transaction.value.toStringAsFixed(2)}',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20,
-                                color: Theme.of(context).primaryColor),
-                          ),
-                          padding: EdgeInsets.all(10),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              transaction.title,
-                              style: Theme.of(context).textTheme.headline6,
-                            ),
-                            Text(
-                              DateFormat('d MMM y').format(transaction.date),
-                              style: TextStyle(color: Colors.grey),
-                            )
-                          ],
-                        )
-                      ],
+                      ),
+                      title: Text(
+                        transaction.title,
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      subtitle:
+                          Text(DateFormat('d MMM y').format(transaction.date)),
                     ),
                   );
                 },

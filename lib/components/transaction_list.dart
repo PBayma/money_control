@@ -4,8 +4,9 @@ import 'package:money_control/models/transaction.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
+  final void Function(String) onRemove;
 
-  TransactionList(this.transactions);
+  TransactionList(this.transactions, this.onRemove);
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,8 @@ class TransactionList extends StatelessWidget {
                     ),
                     child: ListTile(
                       leading: CircleAvatar(
-                        foregroundColor: Colors.white,
+                        foregroundColor:
+                            Theme.of(context).textTheme.button.color,
                         backgroundColor: Theme.of(context).primaryColor,
                         radius: 30,
                         child: Padding(
@@ -51,6 +53,13 @@ class TransactionList extends StatelessWidget {
                             child: Text('R\$${transaction.value}'),
                           ),
                         ),
+                      ),
+                      trailing: IconButton(
+                        icon: Icon(
+                          Icons.delete,
+                          color: Theme.of(context).errorColor,
+                        ),
+                        onPressed: () => onRemove(transaction.id),
                       ),
                       title: Text(
                         transaction.title,

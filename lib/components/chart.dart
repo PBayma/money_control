@@ -24,8 +24,8 @@ class Chart extends StatelessWidget {
         }
       }
 
-      print(DateFormat.E().format(weekDay)[0]);
-      print(totalSum);
+      // print(DateFormat.E().format(weekDay)[0]);
+      // print(totalSum);
 
       return {
         'day': DateFormat.E().format(weekDay)[0],
@@ -56,7 +56,9 @@ class Chart extends StatelessWidget {
               child: ChartBar(
                 label: transaction['day'],
                 value: transaction['value'],
-                percentage: (transaction['value'] as double) / _weekTotalValue,
+                percentage: _weekTotalValue == 0
+                    ? 0
+                    : (transaction['value'] as double) / _weekTotalValue,
               ),
             );
           }).toList(),

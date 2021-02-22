@@ -17,27 +17,29 @@ class MoneyControlApp extends StatelessWidget {
     return MaterialApp(
       home: MyHomePage(),
       theme: ThemeData(
-          primaryColor: Colors.purple[700],
-          accentColor: Colors.orange[900],
-          fontFamily: 'Quicksand',
+        primaryColor: Colors.purple[700],
+        accentColor: Colors.orange[900],
+        fontFamily: 'Quicksand',
+        textTheme: ThemeData.light().textTheme.copyWith(
+            headline6: TextStyle(
+              fontFamily: 'OpenSans',
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+            button: TextStyle(
+              color: Colors.white,
+            )),
+        appBarTheme: AppBarTheme(
           textTheme: ThemeData.light().textTheme.copyWith(
-              headline6: TextStyle(
-                fontFamily: 'OpenSans',
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
-              button: TextStyle(
-                color: Colors.white,
-              )),
-          appBarTheme: AppBarTheme(
-            textTheme: ThemeData.light().textTheme.copyWith(
-                  headline6: TextStyle(
-                    fontFamily: 'OpenSans',
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                  ),
+                headline6: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
                 ),
-          )),
+              ),
+        ),
+      ),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

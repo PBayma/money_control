@@ -95,8 +95,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    bool _isLandScape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+    final mediaQuery = MediaQuery.of(context);
+    bool _isLandScape = mediaQuery.orientation == Orientation.landscape;
     final appBar = AppBar(
       title: Text('Despesas Pessoais'),
       actions: [
@@ -116,11 +116,11 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
 
-    final avaliableHeight = MediaQuery.of(context).size.height -
+    final avaliableHeight = mediaQuery.size.height -
         //Representa a altura do AppBar
         appBar.preferredSize.height -
         // Representa a altura do StatusBar
-        MediaQuery.of(context).padding.top;
+        mediaQuery.padding.top;
 
     return Scaffold(
       appBar: appBar,
@@ -132,7 +132,8 @@ class _MyHomePageState extends State<MyHomePage> {
             //     mainAxisAlignment: MainAxisAlignment.center,
             //     children: [
             //       Text('Exibir Gŕafico'),
-            //       Switch(
+            //       Switch.adaptive(
+            //         activeColor: Theme.of(context).accentColor,
             //         value: _showChart,
             //         onChanged: (value) {
             //           setState(() {

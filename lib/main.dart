@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money_control/components/chart.dart';
 import 'package:money_control/components/transaction_form.dart';
@@ -93,28 +95,46 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  Widget _getIconButton(IconData icon, Function fn) {
+    return Platform.isIOS
+        ? GestureDetector(onTap: fn, child: Icon(icon))
+        : IconButton(icon: Icon(icon), onPressed: fn);
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     bool _isLandScape = mediaQuery.orientation == Orientation.landscape;
-    final appBar = AppBar(
-      title: Text('Despesas Pessoais'),
-      actions: [
-        if (_isLandScape)
-          IconButton(
-            icon: Icon(_showChart ? Icons.list : Icons.bar_chart),
-            onPressed: () {
-              setState(() {
-                _showChart = !_showChart;
-              });
-            },
-          ),
-        IconButton(
-          icon: Icon(Icons.add),
-          onPressed: () => _openTransactionFormModal(context),
-        )
-      ],
-    );
+
+    final actions = [
+      if (_isLandScape)
+        _getIconButton(
+          _showChart ? Icons.list : Icons.bar_chart,
+          () {
+            setState(() {
+              _showChart = !_showChart;
+            });
+          },
+        ),
+      _getIconButton(
+        Icons.add,
+        () => _openTransactionFormModal(context),
+      )
+    ];
+
+    //AppBar precisa ser desse tipo
+    final PreferredSizeWidget appBar = Platform.isIOS
+        ? CupertinoNavigationBar(
+            middle: Text('Despesas Pessoais'),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: actions,
+            ),
+          )
+        : AppBar(
+            title: Text('Despesas Pessoais'),
+            actions: actions,
+          );
 
     final avaliableHeight = mediaQuery.size.height -
         //Representa a altura do AppBar
@@ -122,44 +142,51 @@ class _MyHomePageState extends State<MyHomePage> {
         // Representa a altura do StatusBar
         mediaQuery.padding.top;
 
-    return Scaffold(
-      appBar: appBar,
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // if (_isLandScape)
-            //   Row(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     children: [
-            //       Text('Exibir Gŕafico'),
-            //       Switch.adaptive(
-            //         activeColor: Theme.of(context).accentColor,
-            //         value: _showChart,
-            //         onChanged: (value) {
-            //           setState(() {
-            //             _showChart = value;
-            //           });
-            //         },
-            //       ),
-            //     ],
-            //   ),
-            if (_showChart || !_isLandScape)
-              Container(
-                height: avaliableHeight * (_isLandScape ? 0.6 : 0.3),
-                child: Chart(_recentTransactions),
-              ),
-            if (!_showChart || !_isLandScape)
-              Container(
-                height: avaliableHeight * (_isLandScape ? 0.8 : 0.7),
-                child: TransactionList(_transactions, _removeTransaction),
-              ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () => _openTransactionFormModal(context),
+    final bodyPage = SingleChildScrollView(
+      child: Column(
+        children: [
+          // if (_isLandScape)
+          //   Row(
+          //     mainAxisAlignment: MainAxisAlignment.center,
+          //     children: [
+          //       Text('Exibir Gŕafico'),
+          //       Switch.adaptive(
+          //         activeColor: Theme.of(context).accentColor,
+          //         value: _showChart,
+          //         onChanged: (value) {
+          //           setState(() {
+          //             _showChart = value;
+          //           });
+          //         },
+          //       ),
+          //     ],
+          //   ),
+          if (_showChart || !_isLandScape)
+            Container(
+              height: avaliableHeight * (_isLandScape ? 0.6 : 0.3),
+              child: Chart(_recentTransactions),
+            ),
+          if (!_showChart || !_isLandScape)
+            Container(
+              height: avaliableHeight * (_isLandScape ? 0.8 : 0.7),
+              child: TransactionList(_transactions, _removeTransaction),
+            ),
+        ],
       ),
     );
+
+    return Platform.isIOS
+        ? CupertinoPageScaffold(
+            navigationBar: appBar,
+            child: bodyPage,
+          )
+        : Scaffold(
+            appBar: appBar,
+            body: bodyPage,
+            floatingActionButton: FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () => _openTransactionFormModal(context),
+            ),
+          );
   }
 }

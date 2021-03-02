@@ -106,10 +106,15 @@ class _MyHomePageState extends State<MyHomePage> {
     final mediaQuery = MediaQuery.of(context);
     bool _isLandScape = mediaQuery.orientation == Orientation.landscape;
 
+    final chartIcon =
+        Platform.isIOS ? CupertinoIcons.chart_bar : Icons.bar_chart;
+
+    final iconList = Platform.isIOS ? CupertinoIcons.list_bullet : Icons.list;
+
     final actions = [
       if (_isLandScape)
         _getIconButton(
-          _showChart ? Icons.list : Icons.bar_chart,
+          _showChart ? iconList : chartIcon,
           () {
             setState(() {
               _showChart = !_showChart;
@@ -142,36 +147,38 @@ class _MyHomePageState extends State<MyHomePage> {
         // Representa a altura do StatusBar
         mediaQuery.padding.top;
 
-    final bodyPage = SingleChildScrollView(
-      child: Column(
-        children: [
-          // if (_isLandScape)
-          //   Row(
-          //     mainAxisAlignment: MainAxisAlignment.center,
-          //     children: [
-          //       Text('Exibir Gŕafico'),
-          //       Switch.adaptive(
-          //         activeColor: Theme.of(context).accentColor,
-          //         value: _showChart,
-          //         onChanged: (value) {
-          //           setState(() {
-          //             _showChart = value;
-          //           });
-          //         },
-          //       ),
-          //     ],
-          //   ),
-          if (_showChart || !_isLandScape)
-            Container(
-              height: avaliableHeight * (_isLandScape ? 0.6 : 0.3),
-              child: Chart(_recentTransactions),
-            ),
-          if (!_showChart || !_isLandScape)
-            Container(
-              height: avaliableHeight * (_isLandScape ? 0.8 : 0.7),
-              child: TransactionList(_transactions, _removeTransaction),
-            ),
-        ],
+    final bodyPage = SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            // if (_isLandScape)
+            //   Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: [
+            //       Text('Exibir Gŕafico'),
+            //       Switch.adaptive(
+            //         activeColor: Theme.of(context).accentColor,
+            //         value: _showChart,
+            //         onChanged: (value) {
+            //           setState(() {
+            //             _showChart = value;
+            //           });
+            //         },
+            //       ),
+            //     ],
+            //   ),
+            if (_showChart || !_isLandScape)
+              Container(
+                height: avaliableHeight * (_isLandScape ? 0.6 : 0.3),
+                child: Chart(_recentTransactions),
+              ),
+            if (!_showChart || !_isLandScape)
+              Container(
+                height: avaliableHeight * (_isLandScape ? 0.8 : 0.7),
+                child: TransactionList(_transactions, _removeTransaction),
+              ),
+          ],
+        ),
       ),
     );
 

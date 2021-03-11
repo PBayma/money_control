@@ -63,8 +63,8 @@ class TransactionList extends StatelessWidget {
                   ),
                   trailing: MediaQuery.of(context).size.width > 480
                       ? FlatButton.icon(
-                          icon: Icon(Icons.delete),
-                          label: Text('Excluir'),
+                          icon: const Icon(Icons.delete),
+                          label: const Text('Excluir'),
                           textColor: Theme.of(context).errorColor,
                           onPressed: () => onRemove(transaction.id),
                         )
